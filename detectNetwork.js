@@ -18,24 +18,45 @@ var detectNetwork = function(cardNumber) {
 // Discover always has a prefix of 6011, 644-649, or 65, and a length of 16 or 19.
 // Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19.
 
-
-    let cardName = '';
-    let cardLength = cardNumber.length;
-    let prefix = cardNumber.substring(0,2);
-    if (cardLength === 15 && (prefix === '34' || prefix === '37')) {
-      cardName = 'American Express'
-    } else if (cardLength === 14) {
-      if (prefix === '38' || prefix === '39') {
-        cardName = 'Diner\'s Club'
+    let cardDetails = {
+      'Visa' : {
+        'prefix' : ['4'],
+        'cardLength' : [13, 16, 19]
+      },
+      'MasterCard': {
+        'prefix' :['51', '52', '53', '54', '55'],
+        'cardLength' : [16]
+      },
+      'Discover' : {
+        'prefix' : ['6011', '644', '645', '646', '647', '648', '649', '65'],
+        'cardLength' : [16, 19]
+      },
+      'Maestro' : {
+        'prefix' : ['5018', '5020', '5038', '6304'],
+        'cardLength' : [12, 13, 14, 15, 16, 17, 18, 19]
+      },
+      'Diner\'s Club' : {
+        'prefix' : ['38', '39'],
+        'cardLength' : [14]
+      },
+      'American Express' : {
+        'prefix' : ['34', '37'],
+        'cardLength' : [15]
       }
-    } else if (cardNumber[0] === '4') {
-      if (cardLength === 13 || cardLength === 16 || cardLength === 19) {
-        cardName = 'Visa'
-      }
-    } else if (cardLength === 16 && prefix > '50' && prefix < '56') {
-      cardName = 'MasterCard'
-    } else if () {
 
     }
-    return cardName;
+
+    let prefix = '';
+    let cardLength = cardNumber.length;
+
+    for (let i = 0; i < 5; i++) {
+      prefix += cardNumber[i];
+      for (let keys in cardDetails) {
+        if (cardDetails[keys]['prefix'].indexOf(prefix) > -1) {
+          if (cardDetails[keys]['cardLength'].indexOf(cardLength) > -1) {
+            return keys;
+          }
+        }
+      }
+    }
 };
