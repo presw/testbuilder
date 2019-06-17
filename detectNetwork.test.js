@@ -18,7 +18,7 @@ describe('Introduction to Mocha Tests - READ ME FIRST', function() {
   // You will not be able to proceed with a failing test. 
 
   it('Throws an error so it fails', function() {
-    throw new Error('Delete me!');
+    // throw new Error('Delete me!');
   });
 
   it('Doesn\'t throw an error, so it doesn\'t fail', function() {
@@ -33,7 +33,7 @@ describe('Introduction to Mocha Tests - READ ME FIRST', function() {
   // A test should only fail if the expected behavior doesn't match the actual.
   it('Throws an error when expected behavior does not match actual behavior', function() {
     var even = function(num){
-      return num/2 === 0;
+      return num % 2 === 0;
     }
 
     if(even(10) !== true) {
@@ -45,7 +45,6 @@ describe('Diner\'s Club', function() {
   // Be careful, tests can have bugs too...
 
   it('has a prefix of 38 and a length of 14', function() {
-    throw new Error('Delete me!');
  
     if (detectNetwork('38345678901234') !== 'Diner\'s Club') {
       throw new Error('Test failed');
@@ -53,7 +52,7 @@ describe('Diner\'s Club', function() {
   });
 
   it('has a prefix of 39 and a length of 14', function() {
-    if (detectNetwork('3934567890123') !== 'Diner\'s Club') {
+    if (detectNetwork('39345678901234') !== 'Diner\'s Club') {
       throw new Error('Test failed');
     }
  
@@ -64,7 +63,7 @@ describe('American Express', function() {
   // It can get annoying to keep typing the if/throw, so here is a
   // helper function to throw an error if the input statement isn't true. 
   var assert = function(isTrue) {
-    if(isTrue) {
+    if(!isTrue) {
       throw new Error('Test failed');
     }
  
@@ -84,8 +83,7 @@ describe('Visa', function() {
   // Chai provides an assert that acts the same as our previous assert.
   // Search the documentation to figure out how to access it. 
   //   http://chaijs.com/
-  var assert = chai.FILL_ME_IN;
- 
+  var assert = chai.assert;
 
   it('has a prefix of 4 and a length of 13', function() {
     assert(detectNetwork('4123456789012') === 'Visa');
@@ -107,15 +105,15 @@ describe('MasterCard', function() {
   //   http://chaijs.com/api/bdd/
   var expect = chai.expect;
  
-  it(FILL_ME_IN, function() {
+  it('has a prefix of 51 and a length of 16', function() {
     expect(detectNetwork('5112345678901234')).to.equal('MasterCard');
   });
  
-  it(FILL_ME_IN, function() {
+  it('has a prefix of 52 and a length of 16', function() {
     expect(detectNetwork('5212345678901234')).to.equal('MasterCard');
   });
  
-  it(FILL_ME_IN, function() {
+  it('has a prefix of 53 and a length of 16', function() {
     expect(detectNetwork('5312345678901234')).to.equal('MasterCard');
   });
  
@@ -130,24 +128,107 @@ describe('MasterCard', function() {
   var should = chai.should();
   
   it('has a prefix of 54 and a length of 16', function() {
-    detectNetwork('5412345678901234').should.equal(FILL_ME_IN);
+    detectNetwork('5412345678901234').should.equal('MasterCard');
   });
  
   it('has a prefix of 55 and a length of 16', function() {
-    detectNetwork('5512345678901234').should.equal(FILL_ME_IN);
-  })
+    detectNetwork('5512345678901234').should.equal('MasterCard');
+  });
  
 });
 
 describe('Discover', function() {
   // Tests without a function will be marked as "pending" and not run
   // Implement these tests (and others) and make them pass!
-  it('has a prefix of 6011 and a length of 16');
-  it('has a prefix of 6011 and a length of 19');
+  it('has a prefix of 6011 and a length of 16', function() {
+    detectNetwork('6011003148441234').should.equal('Discover');
+  });
+
+  it('has a prefix of 6011 and a length of 19', function() {
+    detectNetwork('6011123456789123456').should.equal('Discover');
+  });
+
+  it('has a prefix of 65 and a length of 16', function() {
+    detectNetwork('6511123456789123').should.equal('Discover');
+  });
+
+  it('has a prefix of 65 and a length of 19', function() {
+    detectNetwork('6511123456789123456').should.equal('Discover');
+  });
+
+  it('has a prefix of 644 and a length of 16', function() {
+    detectNetwork('6441123456789123').should.equal('Discover');
+  });
+
+  it('has a prefix of 644 and a length of 19', function() {
+    detectNetwork('6441123456789123999').should.equal('Discover');
+  });
+
+  it('has a prefix of 645 and a length of 16', function() {
+    detectNetwork('6451123456789123').should.equal('Discover');
+  });
+
+  it('has a prefix of 645 and a length of 19', function() {
+    detectNetwork('6451123456789123999').should.equal('Discover');
+  });
+
+  it ('has a prefix of 646 and a length of 16', function () {
+    detectNetwork('6461123456789123').should.equal('Discover');
+  });
+
+  it ('has a prefix of 646 and a length of 19', function () {
+    detectNetwork('6461123456789123999').should.equal('Discover');
+  });
+
+  it('has a prefix of 647 and a length of 16', function() {
+    detectNetwork('6471234567890123').should.equal('Discover');
+  });
+
+  it('has a prefix of 647 and a length of 19', function() {
+    detectNetwork('6471234567890123456').should.equal('Discover');
+  });
+
+  it('has a prefix of 648 and a length of 16', function() {
+    detectNetwork('6481234567890123').should.equal('Discover');
+  });
+
+  it('has a prefix of 648 and a length of 19', function() {
+    detectNetwork('6481234567890123456').should.equal('Discover');
+  });
+
+  it('has a prefix of 649 and a length of 19', function() {
+    detectNetwork('6491234567890123456').should.equal('Discover');
+  });
+
+  it('has a prefix of 649 and a length of 16', function() {
+    detectNetwork('6491234567890123').should.equal('Discover');
+  });
+
 });
 
 describe('Maestro', function() {
+  let cardGenerator = function(prefix, length) {
+    let card = prefix;
+    card.padEnd(length - prefix.length, 0)
+    return card;
+  }
+
+  for (let length = 12; length >= 19; length++) {
+    (function (length) {
+      it('has a prefix of 5018 and a length of ' + length, function () {
+        detectNetwork(cardGenerator('5018', length)).should.equal('Maestro')
+      })
+      it('has a prefix of 5020 and a length of ' + length, function () {
+        detectNetwork(cardGenerator('5020', length)).should.equal('Maestro')
+      })
+    })(length)
+  }
   // Write full test coverage for the Maestro card
+  // for loop that iterates through our length (range of 12 to 19)
+     // IIFE function that takes in length
+        // 4 it statements - 5018, 5020, 5038, or 6304
+        // create string with prefix and length based on iteration
+        //
 });
 
 describe('should support China UnionPay')
