@@ -16,11 +16,6 @@
 // MasterCard always has a prefix of 51, 52, 53, 54, or 55 and a length of 16.
 // Discover always has a prefix of 6011, 644-649, or 65, and a length of 16 or 19.
 // Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19.
-    let populateDetails = function(company, keyName, start, end) {
-      for (let i = start; i <= end; i++) {
-        cardDetails[company][keyName].push(i.toString());
-      }
-    }
 
     let cardGenerator = function(prefix, length) {
       let card = prefix;
