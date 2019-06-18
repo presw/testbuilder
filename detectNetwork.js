@@ -24,11 +24,30 @@
 
     let cardGenerator = function(prefix, length) {
       let card = prefix;
+      card = card.toString();
       card = card.padEnd(length, 0);
       return card;
     }
 
     let cardDetails = {
+      getDetails : function(cardName, detailName) {
+        let prefixArray = this[cardName][detailName];
+        let outputArray = [];
+
+        for (let i = 0; i < prefixArray.length; i++) {
+          let start = prefixArray[i][0];
+          let stop = prefixArray[i][0];
+          if (prefixArray[i].length !== 1) {
+            stop = prefixArray[i][1];
+          }
+
+          for (start; start <= stop; start++) {
+           outputArray.push(start);
+          }
+        }
+        return outputArray;
+      },
+
       'Visa' : {
         'prefix' : [[4]],
         'cardLength' : [[13], [16], [19]]
@@ -55,62 +74,68 @@
       },
       'China UnionPay' : {
         'prefix' : [[622126, 622925], [624, 626], [6282, 6288]],
-        'length' : [[16, 19]]
+        'cardLength' : [[16, 19]]
       },
       'Switch' : {
         'prefix' : [[4903], [4905], [4911], [4936], [564182], [633110], [6333], [6759]],
-        'length' : [[16], [18, 19]]
+        'cardLength' : [[16], [18, 19]]
       }
     }
 
 var detectNetwork = function(cardNumber) {
 
-  let prefix = '';
+  let prefix = [];
   let cardLength = cardNumber.length;
   let checkCardLength = false;
 
-  for (let i = 0; i < 5; i++) {
-    prefix += cardNumber[i];
+  let cardArray = cardNumber.split('');
+
+  for (let i = 7; i >= 0; i--) {
+    cardArray = cardArray.slice(0, i);
+
+    let prefix = cardArray.join('');
     prefix = parseInt(prefix);
 
     for (let keys in cardDetails) {
       checkCardLength = false;
-      let cardIndex = cardDetails[keys]['prefix'];
+      if (typeof cardDetails[keys] !== 'function') {
+        let cardIndex = cardDetails[keys]['prefix'];
 
-      // "MasterCard"
-      for (let i = 0; i < cardIndex.length; i++) {
-        let start = cardIndex[i][0];
-        let stop = cardIndex[i][0];
+        // "MasterCard"
+        for (let i = 0; i < cardIndex.length; i++) {
+          let start = cardIndex[i][0];
+          let stop = cardIndex[i][0];
 
-        if (checkCardLength === true) {
-          break;
-        }
-
-        if (cardIndex[i].length !== 1) {
-          stop = cardIndex[i][1];
-        }
-
-        for (start; start <= stop; start++) {
-          if (start === prefix) {
-            checkCardLength = true;
+          if (checkCardLength === true) {
             break;
           }
-        }
-      }
 
-      if (checkCardLength) {
-        let lengthIndex = cardDetails[keys]['cardLength'];
-        for (let i = 0; i < lengthIndex.length; i++) {
-          let start = lengthIndex[i][0];
-          let stop = lengthIndex[i][0];
-
-          if (lengthIndex[i].length !== 1) {
-            stop = lengthIndex[i][1];
+          if (cardIndex[i].length !== 1) {
+            stop = cardIndex[i][1];
           }
 
           for (start; start <= stop; start++) {
-            if (start === cardLength) {
-              return keys;
+            if (start === prefix) {
+              checkCardLength = true;
+              break;
+            }
+          }
+        }
+
+        if (checkCardLength) {
+          let lengthIndex = cardDetails[keys]['cardLength'];
+          for (let i = 0; i < lengthIndex.length; i++) {
+            let start = lengthIndex[i][0];
+            let stop = lengthIndex[i][0];
+
+            if (lengthIndex[i].length !== 1) {
+              stop = lengthIndex[i][1];
+            }
+
+            for (start; start <= stop; start++) {
+              if (start === cardLength) {
+                return keys;
+              }
             }
           }
         }
