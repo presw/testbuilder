@@ -44,19 +44,32 @@ describe('Introduction to Mocha Tests - READ ME FIRST', function() {
 describe('Diner\'s Club', function() {
   // Be careful, tests can have bugs too...
 
-  it('has a prefix of 38 and a length of 14', function() {
- 
-    if (detectNetwork('38345678901234') !== 'Diner\'s Club') {
-      throw new Error('Test failed');
+    // get the object details for this company
+  let prefixArray = cardDetails.getDetails('Diner\'s Club', 'prefix');
+  let lengthArray = cardDetails.getDetails('Diner\'s Club', 'cardLength');
+// for every prefix
+// for every length
+  for (let i = 0; i < prefixArray.length; i++) {
+    for (let j = 0; j < lengthArray.length; j++) {
+      it('has a prefix of ' + prefixArray[i] + ' and a length of ' + lengthArray[j], function () {
+        detectNetwork(cardGenerator(prefixArray[i], lengthArray[j])).should.equal('Diner\'s Club')
+      })
     }
-  });
+  }
 
-  it('has a prefix of 39 and a length of 14', function() {
-    if (detectNetwork('39345678901234') !== 'Diner\'s Club') {
-      throw new Error('Test failed');
-    }
+  // it('has a prefix of 38 and a length of 14', function() {
  
-  });
+  //   if (detectNetwork('38345678901234') !== 'Diner\'s Club') {
+  //     throw new Error('Test failed');
+  //   }
+  // });
+
+  // it('has a prefix of 39 and a length of 14', function() {
+  //   if (detectNetwork('39345678901234') !== 'Diner\'s Club') {
+  //     throw new Error('Test failed');
+  //   }
+
+  // });
 });
 
 describe('American Express', function() {
@@ -228,4 +241,28 @@ describe('Maestro', function() {
   }
 });
 
-describe('should support Switch', function() {});
+describe('China UnionPay', function() {
+
+  let prefixArray = cardDetails.getDetails('China UnionPay', 'prefix');
+  let lengthArray = cardDetails.getDetails('China UnionPay', 'cardLength');
+  for (let i = 0; i < prefixArray.length; i++) {
+    for (let j = 0; j < lengthArray.length; j++) {
+      it('has a prefix of ' + prefixArray[i] + ' and a length of ' + lengthArray[j], function () {
+        detectNetwork(cardGenerator(prefixArray[i], lengthArray[j])).should.equal('China UnionPay')
+      })
+    }
+  }
+})
+
+describe('should support Switch', function() {
+
+  let prefixArray = cardDetails.getDetails('Switch', 'prefix');
+  let lengthArray = cardDetails.getDetails('Switch', 'cardLength');
+  for (let i = 0; i < prefixArray.length; i++) {
+    for (let j = 0; j < lengthArray.length; j++) {
+      it('has a prefix of ' + prefixArray[i] + ' and a length of ' + lengthArray[j], function () {
+        detectNetwork(cardGenerator(prefixArray[i], lengthArray[j])).should.equal('Switch')
+      })
+    }
+  }
+});
