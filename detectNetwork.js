@@ -17,122 +17,99 @@
 // Discover always has a prefix of 6011, 644-649, or 65, and a length of 16 or 19.
 // Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19.
 
-    let cardGenerator = function(prefix, length) {
-      let card = prefix;
-      card = card.toString();
-      card = card.padEnd(length, 0);
-      return card;
+let detailsFound = (property, value, keys) => {
+  let cardIndex = cardDetails[keys][property];
+  for (let i = 0; i < cardIndex.length; i++) {
+    let start = cardIndex[i][0];
+    let stop = cardIndex[i][0];
+
+    if (cardIndex[i].length !== 1) {
+      stop = cardIndex[i][1];
     }
 
-    let cardDetails = {
-      getDetails : function(cardName, detailName) {
-        let prefixArray = this[cardName][detailName];
-        let outputArray = [];
-
-        for (let i = 0; i < prefixArray.length; i++) {
-          let start = prefixArray[i][0];
-          let stop = prefixArray[i][0];
-          if (prefixArray[i].length !== 1) {
-            stop = prefixArray[i][1];
-          }
-
-          for (start; start <= stop; start++) {
-           outputArray.push(start);
-          }
-        }
-        return outputArray;
-      },
-
-      'Visa' : {
-        'prefix' : [[4]],
-        'cardLength' : [[13], [16], [19]]
-      },
-      'MasterCard': {
-        'prefix' :[[51, 55]],
-        'cardLength' : [[16]]
-      },
-      'Discover' : {
-        'prefix' : [[6011], [644, 649], [65]],
-        'cardLength' : [[16], [19]]
-      },
-      'Maestro' : {
-        'prefix' : [[5018], [5020], [5038], [6304]],
-        'cardLength' : [[12, 19]]
-      },
-      'Diner\'s Club' : {
-        'prefix' : [[38], [39]],
-        'cardLength' : [[14]]
-      },
-      'American Express' : {
-        'prefix' : [[34], [37]],
-        'cardLength' : [[15]]
-      },
-      'China UnionPay' : {
-        'prefix' : [[622126, 622925], [624, 626], [6282, 6288]],
-        'cardLength' : [[16, 19]]
-      },
-      'Switch' : {
-        'prefix' : [[4903], [4905], [4911], [4936], [564182], [633110], [6333], [6759]],
-        'cardLength' : [[16], [18, 19]]
+    for (start; start <= stop; start++) {
+      if (start === value) {
+        return true;
       }
     }
+  }
+}
+
+let cardGenerator = function(prefix, length) {
+  let card = prefix;
+  card = card.toString();
+  card = card.padEnd(length, 0);
+  return card;
+}
+
+let cardDetails = {
+  getDetails : function(cardName, detailName) {
+    let prefixArray = this[cardName][detailName];
+    let outputArray = [];
+
+    for (let i = 0; i < prefixArray.length; i++) {
+      let start = prefixArray[i][0];
+      let stop = prefixArray[i][0];
+      if (prefixArray[i].length !== 1) {
+        stop = prefixArray[i][1];
+      }
+
+      for (start; start <= stop; start++) {
+       outputArray.push(start);
+      }
+    }
+    return outputArray;
+  },
+
+  'Visa' : {
+    'prefix' : [[4]],
+    'cardLength' : [[13], [16], [19]]
+  },
+  'MasterCard': {
+    'prefix' :[[51, 55]],
+    'cardLength' : [[16]]
+  },
+  'Discover' : {
+    'prefix' : [[6011], [644, 649], [65]],
+    'cardLength' : [[16], [19]]
+  },
+  'Maestro' : {
+    'prefix' : [[5018], [5020], [5038], [6304]],
+    'cardLength' : [[12, 19]]
+  },
+  'Diner\'s Club' : {
+    'prefix' : [[38], [39]],
+    'cardLength' : [[14]]
+  },
+  'American Express' : {
+    'prefix' : [[34], [37]],
+    'cardLength' : [[15]]
+  },
+  'China UnionPay' : {
+    'prefix' : [[622126, 622925], [624, 626], [6282, 6288]],
+    'cardLength' : [[16, 19]]
+  },
+  'Switch' : {
+    'prefix' : [[4903], [4905], [4911], [4936], [564182], [633110], [6333], [6759]],
+    'cardLength' : [[16], [18, 19]]
+  }
+}
 
 var detectNetwork = function(cardNumber) {
 
-  let prefix = [];
   let cardLength = cardNumber.length;
-  let checkCardLength = false;
-
   let cardArray = cardNumber.split('');
 
-  for (let i = 7; i >= 0; i--) {
+  for (let i = 6; i >= 0; i--) {
     cardArray = cardArray.slice(0, i);
 
     let prefix = cardArray.join('');
     prefix = parseInt(prefix);
 
     for (let keys in cardDetails) {
-      checkCardLength = false;
       if (typeof cardDetails[keys] !== 'function') {
-        let cardIndex = cardDetails[keys]['prefix'];
-
-        // "MasterCard"
-        for (let i = 0; i < cardIndex.length; i++) {
-          let start = cardIndex[i][0];
-          let stop = cardIndex[i][0];
-
-          if (checkCardLength === true) {
-            break;
-          }
-
-          if (cardIndex[i].length !== 1) {
-            stop = cardIndex[i][1];
-          }
-
-          for (start; start <= stop; start++) {
-            if (start === prefix) {
-              checkCardLength = true;
-              break;
-            }
-          }
-        }
-
-        if (checkCardLength) {
-          let lengthIndex = cardDetails[keys]['cardLength'];
-          for (let i = 0; i < lengthIndex.length; i++) {
-            let start = lengthIndex[i][0];
-            let stop = lengthIndex[i][0];
-
-            if (lengthIndex[i].length !== 1) {
-              stop = lengthIndex[i][1];
-            }
-
-            for (start; start <= stop; start++) {
-              if (start === cardLength) {
-                return keys;
-              }
-            }
-          }
+        if (detailsFound('prefix', prefix, keys) && detailsFound('cardLength', cardLength, keys)) {
+          return keys;
         }
       }
     }
