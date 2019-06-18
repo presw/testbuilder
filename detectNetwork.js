@@ -46,18 +46,6 @@ var detectNetwork = function(cardNumber) {
 
     }
 
-    let populateDetails = function(company, keyName, start, end) {
-      for (let i = start; i <= end; i++) {
-        cardDetails[company][keyName].push(i.toString());
-      }
-    }
-
-    let cardGenerator = function(prefix, length) {
-      let card = prefix;
-      card = card.padEnd(length, 0);
-      return card;
-    }
-
     let prefix = '';
     let cardLength = cardNumber.length;
 
