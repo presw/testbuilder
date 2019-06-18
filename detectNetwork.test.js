@@ -106,15 +106,15 @@ describe('MasterCard', function() {
   var expect = chai.expect;
  
   it('has a prefix of 51 and a length of 16', function() {
-    expect(detectNetwork('5112345678901234')).to.equal('MasterCard');
+    detectNetwork('5112345678901234').should.equal('MasterCard');
   });
  
   it('has a prefix of 52 and a length of 16', function() {
-    expect(detectNetwork('5212345678901234')).to.equal('MasterCard');
+    (detectNetwork('5212345678901234')).should.equal('MasterCard');
   });
  
   it('has a prefix of 53 and a length of 16', function() {
-    expect(detectNetwork('5312345678901234')).to.equal('MasterCard');
+    (detectNetwork('5312345678901234')).should.equal('MasterCard');
   });
  
 
@@ -207,29 +207,35 @@ describe('Discover', function() {
 });
 
 describe('Maestro', function() {
-  let cardGenerator = function(prefix, length) {
-    let card = prefix;
-    card.padEnd(length - prefix.length, 0)
-    return card;
-  }
 
-  for (let length = 12; length >= 19; length++) {
-    (function (length) {
+  for (let length = 12; length <= 19; length++) {
+    (function(length) {
       it('has a prefix of 5018 and a length of ' + length, function () {
         detectNetwork(cardGenerator('5018', length)).should.equal('Maestro')
       })
       it('has a prefix of 5020 and a length of ' + length, function () {
         detectNetwork(cardGenerator('5020', length)).should.equal('Maestro')
       })
+
+      it('has a prefix of 5038 and a length of ' + length, function () {
+        detectNetwork(cardGenerator('5038', length)).should.equal('Maestro')
+      })
+
+      it('has a prefix of 6304 and a length of ' + length, function() {
+        detectNetwork(cardGenerator('6304', length)).should.equal('Maestro');
+      })
     })(length)
   }
-  // Write full test coverage for the Maestro card
-  // for loop that iterates through our length (range of 12 to 19)
-     // IIFE function that takes in length
-        // 4 it statements - 5018, 5020, 5038, or 6304
-        // create string with prefix and length based on iteration
-        //
 });
 
-describe('should support China UnionPay')
+describe('should support China UnionPay', function() {
+ // 6282-6288
+populateDetails('China UnionPay', 'prefix', 622126, 622925);
+populateDetails('China UnionPay', 'prefix', 624, 626);
+populateDetails('China UnionPay', 'prefix', 6282, 6288);
+populateDetails('China UnionPay', 'length', 16, 19);
+
+console.log(cardDetails);
+
+})
 describe('should support Switch')
