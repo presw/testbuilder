@@ -228,14 +228,4 @@ describe('Maestro', function() {
   }
 });
 
-describe('should support China UnionPay', function() {
- // 6282-6288
-populateDetails('China UnionPay', 'prefix', 622126, 622925);
-populateDetails('China UnionPay', 'prefix', 624, 626);
-populateDetails('China UnionPay', 'prefix', 6282, 6288);
-populateDetails('China UnionPay', 'length', 16, 19);
-
-console.log(cardDetails);
-
-})
-describe('should support Switch')
+describe('should support Switch', function() {});
