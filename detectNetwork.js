@@ -44,14 +44,14 @@ let cardGenerator = function(prefix, length) {
 
 let cardDetails = {
   getDetails : function(cardName, detailName) {
-    let prefixArray = this[cardName][detailName];
+    let detailArray = this[cardName][detailName];
     let outputArray = [];
 
-    for (let i = 0; i < prefixArray.length; i++) {
-      let start = prefixArray[i][0];
-      let stop = prefixArray[i][0];
-      if (prefixArray[i].length !== 1) {
-        stop = prefixArray[i][1];
+    for (let i = 0; i < detailArray.length; i++) {
+      let start = detailArray[i][0];
+      let stop = detailArray[i][0];
+      if (detailArray[i].length !== 1) {
+        stop = detailArray[i][1];
       }
 
       for (start; start <= stop; start++) {
